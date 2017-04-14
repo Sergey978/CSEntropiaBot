@@ -65,6 +65,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EntropiaWindow\Radar.cs" />
     <Compile Include="Robot\Bot.cs" />
     <Compile Include="EntropiaWindow\EntropiaHandler.cs" />
     <Compile Include="MainWindow.xaml.cs">

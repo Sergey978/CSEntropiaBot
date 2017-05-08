@@ -22,7 +22,7 @@ namespace EntropiaBot.EntropiaWindow
 
         public static Area[] AreaArr = { AR1, AR2 , AR3, AR4, AR5, AR6, AR7, AR8};
 
-        public static readonly Area MobDryAr = new Area(377, 852, 403, 858, "MobDryAr");
+        public static readonly Area MobDryAr = new Area(370, 800, 400, 830, "MobDryAr");
 
         public static readonly Area HealthLow = new Area(901, 835, 907, 851, "HealthLow");
         public static readonly Area HealthNorm = new Area(976, 839, 982, 845, "HealthNorm");
@@ -32,7 +32,7 @@ namespace EntropiaBot.EntropiaWindow
         public static  readonly Color NPCColor = System.Drawing.ColorTranslator.FromHtml("#FF8000");
         public static  readonly Color MobColor = System.Drawing.ColorTranslator.FromHtml("#FA3C32");
         public static  readonly Color OtherPlayerColor = System.Drawing.ColorTranslator.FromHtml("#00FA3C");
-        public static  readonly Color YellowColor = System.Drawing.ColorTranslator.FromHtml("#BFC206");
+        public static  readonly Color YellowColor = System.Drawing.ColorTranslator.FromHtml("#E1E203");
         public static  readonly Color HealthLowColor = System.Drawing.ColorTranslator.FromHtml("#D27921");
         public static  readonly Color HealthNormColor = System.Drawing.ColorTranslator.FromHtml("#42A400");
 

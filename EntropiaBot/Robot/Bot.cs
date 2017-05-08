@@ -114,7 +114,7 @@ namespace EntropiaBot.Robot
         //Следит, за окном чтоб окно было активным 
          void watchingWindowEntropia()
         {
-            while (true)
+            while (GameWindowActive)
             {
                 Thread.Sleep(1000);
                 //активно окно
@@ -126,7 +126,21 @@ namespace EntropiaBot.Robot
                 // mob dry
                 if (gameWindow.IsPixelExist(Radar.MobDryAr, Radar.YellowColor))
                 {
+                    Worker.ReportProgress(1, "моб сухой watch");
                     MobDry = true;
+                    
+                }
+                //health Low
+                if (!gameWindow.IsPixelExist(Radar.HealthLow, Radar.HealthLowColor))
+                {
+                    Worker.ReportProgress(1, "Мало здоровья");
+                    HealthMin = true;
+                }
+                //health Norm
+                if (gameWindow.IsPixelExist(Radar.HealthNorm, Radar.HealthNormColor))
+                {
+                    Worker.ReportProgress(1, "Здоровье в порядке");
+                    HealthMin = false;
                 }
                     
             }
@@ -141,11 +155,14 @@ namespace EntropiaBot.Robot
              {
                  
                 
-            //     Worker.ReportProgress(1, "Бот свитит");
-                 GoToMob();
-            //     GoSweat();
-            //     GoToTP();
-            //    WaitForNormHealth();
+                    //     Worker.ReportProgress(1, "Бот свитит");
+                         GoToMob();
+                         Worker.ReportProgress(1, "Начинаю свитинг");
+                         GoSweat();
+                         Worker.ReportProgress(1, "Иду к TP");
+              
+                        GoToTP();
+                        WaitForNormHealth();
              }
          }
 
@@ -232,12 +249,139 @@ namespace EntropiaBot.Robot
 
                  }
                     
-
-                
              }
 
+         }
+
+
+         public void GoSweat()
+         {
+             NextTarget();
+             AutoUseTool();
+             MobDry = false;
+             while (!MobDry && GameWindowActive)
+             {
+                 Thread.Sleep(1000);
+                 if (MobDry)
+                 {
+                     Worker.ReportProgress(1, "моб сухой");
+
+                 }
+             }
+             
+         }
+
+
+         public void GoToTP()
+         {
+             string pointInArea = "";
+             bool TPFound = false;
+             bool nearTP = false;
+             Worker.ReportProgress(1, "Начинаю поиск TP");
+             while (!TPFound && GameWindowActive)
+             {
+
+                 if (gameWindow.IsPixelExist(Radar.RadarAr, Radar.TP))
+                 {
+                     //TP was found
+                     TPFound = true;
+                     Worker.ReportProgress(1, "TP найден");
+                 }
+                 else
+                 {
+                     Worker.ReportProgress(1, "TP нет на радаре , иду назад");
+                     GoBack(1000);
+                 }
+
+             }
+
+             while (!nearTP && GameWindowActive)
+             {
+                 Worker.ReportProgress(1, "вижу TP  , иду к нему");
+
+                 foreach (Area ar in Radar.AreaArr)
+                 {
+                     if (gameWindow.IsPixelExist(ar, Radar.TP))
+                     {
+                         pointInArea = ar.Name;
+                         break;
+
+                     }
+                 }
+                 switch (pointInArea)
+                 {
+                     case "AR1":
+                         {
+                             nearTP = true;
+                             break;
+                         }
+                     case "AR2":
+                         {
+                             GoForward(1000);
+                             break;
+                         }
+                     case "AR3":
+                         {
+                             TurnLeft(200);
+                             break;
+                         }
+                     case "AR4":
+                         {
+                             TurnRight(200);
+                             break;
+                         }
+                     case "AR5":
+                         {
+                             TurnLeft(600);
+                             break;
+                         }
+                     case "AR6":
+                         {
+                             TurnRight(600);
+                             break;
+                         }
+                     case "AR7":
+                         {
+                             TurnLeft(3000);
+                             break;
+                         }
+                     case "AR8":
+                         {
+                             TurnRight(3000);
+                             break;
+                         }
+                     default: GoForward(1000);
+                         break;
+
+                 }
+
+             }
 
          }
+
+         public void WaitForNormHealth()
+         {
+             while (!HealthMin)
+             {
+                 Thread.Sleep(1000);
+             }
+         }
+
+
+         public void NextTarget()
+         {
+             AutoItX.AutoItSetOption("SendKeyDownDelay", 200);
+             AutoItX.Send("0");
+             AutoItX.AutoItSetOption("SendKeyDownDelay", 5);
+         }
+
+         public void AutoUseTool()
+         {
+             AutoItX.AutoItSetOption("SendKeyDownDelay", 200);
+             AutoItX.Send("b");
+             AutoItX.AutoItSetOption("SendKeyDownDelay", 5);
+         }
+
 
          public void GoForward(int timePress)
          {
@@ -261,6 +405,13 @@ namespace EntropiaBot.Robot
              AutoItX.Send("c");
              AutoItX.AutoItSetOption("SendKeyDownDelay", 5);
 
+         }
+
+         public void GoBack(int timePress)
+         {
+             AutoItX.AutoItSetOption("SendKeyDownDelay", timePress);
+             AutoItX.Send("s");
+             AutoItX.AutoItSetOption("SendKeyDownDelay", 5);
          }
 
     }

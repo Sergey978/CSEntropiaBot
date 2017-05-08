@@ -24,7 +24,7 @@ namespace EntropiaBot
     {
         private BackgroundWorker backgroundWorker;
         Bot bot;
-        private const int MAX_LOG_LIST = 20;
+        private const int MAX_LOG_LIST = 10;
         Queue<String> LogList = new Queue<string>();
         //Преобразует очередь в строку
           public String  GetMessageList()
